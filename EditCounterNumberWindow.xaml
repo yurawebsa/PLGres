@@ -1,0 +1,123 @@
+﻿<Window x:Class="CounterPlg.EditCounterNumberWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        Title="Редагувати номер лічильника" Height="422" Width="660"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+    <Border Style="{StaticResource dialogWindowBorder}">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Кнопка закриття -->
+            <Button x:Name="CloseButton" Click="CloseButton_Click" Style="{StaticResource closeButton}" Grid.Row="0">
+                <fa:IconImage Icon="Times" Width="12" Height="12" Foreground="#8294cc"/>
+            </Button>
+
+            <!-- Заголовок -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 20" Style="{StaticResource inputStackPanel}">
+                <fa:IconImage Icon="Circle" Style="{StaticResource titleIcon}"/>
+                <TextBlock Text="Редагування номера" Style="{StaticResource titleText}"/>
+            </StackPanel>
+
+            <!-- Номер лічильника -->
+            <StackPanel Grid.Row="1" Style="{StaticResource inputStackPanel}">
+                <TextBlock Text="№ лічильника:" Style="{StaticResource inputLabelText}"/>
+                <TextBox Text="{Binding Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Style="{StaticResource inputTextBox}">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource inputTextBox}">
+                            <Style.Triggers>
+                                <Trigger Property="Validation.HasError" Value="True">
+                                    <Setter Property="BorderBrush" Value="Red"/>
+                                    <Setter Property="BorderThickness" Value="2"/>
+                                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+
+            <!-- Особовий рахунок -->
+            <StackPanel Grid.Row="2" Style="{StaticResource inputStackPanel}">
+                <TextBlock Text="Особовий рахунок:" Style="{StaticResource inputLabelText}"/>
+                <TextBox x:Name="PersonalAccountTextBox" Text="{Binding PersonalAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         TextChanged="PersonalAccountTextBox_TextChanged" Style="{StaticResource inputTextBox}"/>
+            </StackPanel>
+
+            <!-- Адреса з іконкою інформації -->
+            <StackPanel Grid.Row="3" Style="{StaticResource inputStackPanel}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Адреса:" Style="{StaticResource inputLabelTextAdress}"/>
+                    <fa:IconImage x:Name="InfoIcon" Icon="InfoCircle" Width="18" Height="18" Margin="5 0 78 0" 
+                                  Foreground="#C0392B" VerticalAlignment="Center">
+                        <fa:IconImage.ToolTip>
+                            <ToolTip Content="Додайте адресу в налаштуваннях"/>
+                        </fa:IconImage.ToolTip>
+                    </fa:IconImage>
+                </StackPanel>
+                <TextBox x:Name="AddressTextBox" Text="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         Style="{StaticResource inputTextBox}"/>
+            </StackPanel>
+
+            <!-- Знаходження -->
+            <StackPanel Grid.Row="4" Style="{StaticResource inputStackPanel}">
+                <TextBlock Text="Знаходження:" Style="{StaticResource inputLabelText}"/>
+                <ComboBox SelectedValue="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                          SelectedValuePath="Content" Style="{StaticResource inputComboBox}">
+                    <ComboBoxItem Content="Склад"/>
+                    <ComboBoxItem Content="Захарівка"/>
+                    <ComboBoxItem Content="Ширяєво"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Дата списання (Місяць і Рік) -->
+            <StackPanel Grid.Row="5" Style="{StaticResource inputStackPanel}">
+                <TextBlock Text="Дата списання:" Style="{StaticResource inputLabelText}"/>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="MonthComboBox"
+                              SelectedValue="{Binding SelectedMonth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              SelectedValuePath="Content" Style="{StaticResource dateComboBox}">
+                        <ComboBoxItem Content="Січень"/>
+                        <ComboBoxItem Content="Лютий"/>
+                        <ComboBoxItem Content="Березень"/>
+                        <ComboBoxItem Content="Квітень"/>
+                        <ComboBoxItem Content="Травень"/>
+                        <ComboBoxItem Content="Червень"/>
+                        <ComboBoxItem Content="Липень"/>
+                        <ComboBoxItem Content="Серпень"/>
+                        <ComboBoxItem Content="Вересень"/>
+                        <ComboBoxItem Content="Жовтень"/>
+                        <ComboBoxItem Content="Листопад"/>
+                        <ComboBoxItem Content="Грудень"/>
+                    </ComboBox>
+                    <ComboBox x:Name="YearComboBox" 
+                              SelectedValue="{Binding SelectedYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              Style="{StaticResource dateComboBox}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Статус списання -->
+            <StackPanel Grid.Row="6" Style="{StaticResource inputStackPanel}">
+                <TextBlock Text="Списано:" Style="{StaticResource inputLabelText}"/>
+                <CheckBox IsChecked="{Binding IsWrittenOff, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                          VerticalAlignment="Center" Style="{StaticResource CustomCheckBoxStyle}"/>
+            </StackPanel>
+
+            <!-- Кнопки -->
+            <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="OK" Style="{StaticResource dialogButton}" Click="OkButton_Click"/>
+                <Button Content="Скасувати" Style="{StaticResource dialogButton}" Click="CancelButton_Click" Margin="0"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
